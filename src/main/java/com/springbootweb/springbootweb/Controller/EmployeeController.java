@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -22,7 +23,7 @@ public class EmployeeController {
     }
 
     @GetMapping(path = "/{employeeId}")
-    public ResponseEntity<Object> getEmployeeById(@PathVariable(name="employeeId") Long id){
+    public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable(name="employeeId") Long id){
 //        EmployeeDTO employeeDTO =  employeeService.getEmployeeById(id);
 //        if(employeeDTO == null){
 //            return ResponseEntity.notFound().build();
@@ -30,11 +31,19 @@ public class EmployeeController {
 //        return ResponseEntity.ok(employeeDTO);
 
         Optional<EmployeeDTO> employeeDTO =  employeeService.getEmployeeById(id);
-        if(employeeDTO.isEmpty()){
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(employeeDTO);
+        return employeeDTO
+                .map(employeeDTO1 -> ResponseEntity.ok(employeeDTO1))
+                .orElseThrow(() -> new NoSuchElementException("Employee Not Found"));
+//        if(employeeDTO.isEmpty()){
+//            return ResponseEntity.notFound().build();
+//        }
+//        return ResponseEntity.ok(employeeDTO);
     }
+
+//    @ExceptionHandler(NoSuchElementException.class)
+//    public String handleEmployeeNotFound(NoSuchElementException exception){
+//        return "Employee with the given id not found";
+//    }
 
 //    @GetMapping
 //    public List<EmployeeDTO> getAllEmployees(@RequestParam(required = false) Integer age){
