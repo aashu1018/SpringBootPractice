@@ -1,72 +1,45 @@
 package com.springbootweb.springbootweb.DTO;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDate;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class EmployeeDTO {
 
     private Long id;
+
+    @NotNull(message = "Name of the employee cannot be null")
+    @NotBlank(message = "Name of the employee cannot be blank")
+    @Size(min = 3, max = 10, message = "Name should have a minimum of 3 and a maximum of 10 characters")
     private String name;
+
+    @Email(message = "Email should be a valid email")
     private String email;
+
+    @Min(value = 18, message = "Minimum age of the employee should be 18")
+    @Max(value = 60, message = "Maximum age of the employees should be 60")
     private Integer age;
+
+    @NotBlank(message = "Role of the employee cannot be blank")
+    @Pattern(regexp = "^(Admin|User)$", message = "Role of employee can be either Admin or User")
+    private String role;
+
     private LocalDate dateOfJoining;
+
+    @JsonProperty("isActive")
     private Boolean isActive;
 
-    public EmployeeDTO() {}
+    @NotNull(message = "Salary of the employee cannot be null")
+    @Positive(message = "Salary of the employee should be positive")
+    private Double salary;
 
-    public EmployeeDTO(Long id, String name, String email, Integer age, LocalDate dateOfJoining, Boolean isActive) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.age = age;
-        this.dateOfJoining = dateOfJoining;
-        this.isActive = isActive;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public LocalDate getDateOfJoining() {
-        return dateOfJoining;
-    }
-
-    public void setDateOfJoining(LocalDate dateOfJoining) {
-        this.dateOfJoining = dateOfJoining;
-    }
-
-    public Boolean getIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(Boolean active) {
-        isActive = active;
-    }
 }
